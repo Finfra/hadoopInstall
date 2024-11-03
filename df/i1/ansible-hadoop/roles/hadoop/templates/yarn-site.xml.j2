@@ -1,10 +1,23 @@
 <configuration>
+    <!-- ResourceManager 호스트명 설정 -->
     <property>
         <name>yarn.resourcemanager.hostname</name>
-        <value>{{ ansible_hostname }}</value>
+        <value>s1</value>
     </property>
     <property>
         <name>yarn.nodemanager.aux-services</name>
         <value>mapreduce_shuffle</value>
+    </property>
+    <property>
+        <name>yarn.app.mapreduce.am.env</name>
+        <value>HADOOP_MAPRED_HOME=/opt/hadoop</value>
+    </property>
+    <property>
+        <name>mapreduce.map.env</name>
+        <value>HADOOP_MAPRED_HOME=/opt/hadoop</value>
+    </property>
+    <property>
+        <name>mapreduce.reduce.env</name>
+        <value>HADOOP_MAPRED_HOME=/opt/hadoop</value>
     </property>
 </configuration>

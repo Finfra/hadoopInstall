@@ -1,0 +1,4 @@
+Hadoop is an open-source framework
+Hadoop enables processing of large data sets
+MapReduce is a programming model for data processing
+The Hadoop ecosystem includes tools like HDFS and YARN
