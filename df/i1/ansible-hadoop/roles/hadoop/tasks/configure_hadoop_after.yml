@@ -1,5 +1,64 @@
-- name: Ensure Hadoop path is in root's .bashrc
+# roles/hadoop/tasks/configure_hadoop_after.yml
+
+- name: Ensure JAVA_HOME is set in hadoop-env.sh
   lineinfile:
-    path: /root/.bashrc
-    line: "export PATH=$PATH:/opt/hadoop/bin"
-    state: present
+    path: /opt/hadoop/etc/hadoop/hadoop-env.sh
+    line: 'export JAVA_HOME=/usr/lib/jvm/jre-openjdk'
+    create: yes
+
+- name: Reload environment variables
+  shell: source /opt/hadoop/etc/hadoop/hadoop-env.sh
+  args:
+    executable: /bin/bash
+
+# 네임노드 멈춤 (namenodes 그룹에서만)
+- name: Stop any running NameNode daemon
+  command: hdfs --daemon stop namenode
+  ignore_errors: yes
+  when: "'namenodes' in group_names"
+
+# 데이터노드 멈춤 (datanodes 그룹에서만)
+- name: Stop any running DataNode daemon
+  command: hdfs --daemon stop datanode
+  ignore_errors: yes
+  when: "'datanodes' in group_names"
+
+# 네임노드 포맷 (namenodes 그룹에서만)
+- name: Format NameNode
+  command: hdfs namenode -format
+  when: "'namenodes' in group_names and (namenode_format_required | default(true))"
+
+# 네임노드 시작 (namenodes 그룹에서만)
+- name: Start NameNode daemon
+  command: hdfs --daemon start namenode
+  register: namenode_start
+  until: namenode_start.rc == 0
+  retries: 5
+  delay: 10
+  when: "'namenodes' in group_names"
+
+# # 네임노드가 준비될 때까지 대기 (namenodes 그룹에서만)
+# - name: Wait for NameNode to be ready
+#   pause:
+#     seconds: 10
+#   when: "'namenodes' in group_names"
+
+# 데이터노드 시작 (datanodes 그룹에서만)
+- name: Start DataNode daemon
+  command: hdfs --daemon start datanode
+  register: datanode_start
+  until: datanode_start.rc == 0
+  retries: 5
+  delay: 10
+  when: "'datanodes' in group_names"
+
+# # 데이터노드가 준비될 때까지 대기 (datanodes 그룹에서만)
+# - name: Wait for DataNode to be ready
+#   pause:
+#     seconds: 10
+#   when: "'datanodes' in group_names"
+
+# HDFS 루트 디렉토리 확인 (namenodes 그룹에서만)
+- name: Verify Hadoop setup by listing root directory
+  command: hadoop fs -ls /
+  when: "'namenodes' in group_names"

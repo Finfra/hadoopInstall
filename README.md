@@ -11,6 +11,14 @@ cd hadoopInstall
 ```
 ## Hadoop Install by Ansible
 ```
-ansible-playbook -i /df/ansible-hadoop/hosts /df/ansible-hadoop/hadoop_install.yml
+ ansible-playbook --flush-cache -i /df/ansible-hadoop/hosts /df/ansible-hadoop/hadoop_install.yml
+```
 
+
+## dfs Test
+```
+echo "hi" > a.txt
+hadoop fs -mkdir -p /data     # 먼저 /data 디렉토리가 없다면 생성
+hadoop fs -put a.txt /data    # 로컬 파일을 HDFS로 복사
+hadoop fs -ls /data
 ```

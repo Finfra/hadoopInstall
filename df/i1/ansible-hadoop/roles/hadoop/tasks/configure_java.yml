@@ -1,16 +1,24 @@
-- name: Set JAVA_HOME in hadoop-env.sh
+# roles/hadoop/tasks/configure_java.yml
+
+- name: Install OpenJDK
+  package:
+    name: java-1.8.0-openjdk-devel
+    state: present
+
+- name: Set JAVA_HOME in /etc/bashrc
   lineinfile:
-    path: /opt/hadoop/etc/hadoop/hadoop-env.sh
-    line: 'export JAVA_HOME=/usr/lib/jvm/jre-openjdk'
+    path: /etc/bashrc
+    line: 'export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk'
     create: yes
 
-- name: Set JAVA_HOME in ~/.bashrc
+- name: Add JAVA_HOME to PATH
   lineinfile:
-    path: ~/.bashrc
-    line: 'export JAVA_HOME=/usr/lib/jvm/jre-openjdk'
+    path: /etc/bashrc
+    line: 'export PATH=$JAVA_HOME/bin:$PATH'
     create: yes
 
-- name: Apply .bashrc changes
-  shell: source ~/.bashrc
+- name: Source /etc/bashrc
+  shell: source /etc/bashrc
   args:
     executable: /bin/bash
+

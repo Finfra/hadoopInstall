@@ -4,7 +4,7 @@ FROM centos:centos7
 RUN sed -i 's|^mirrorlist=|#mirrorlist=|g' /etc/yum.repos.d/CentOS-Base.repo && \
     sed -i 's|^#baseurl=http://mirror.centos.org/centos/\$releasever|baseurl=http://vault.centos.org/7.9.2009|g' /etc/yum.repos.d/CentOS-Base.repo
 
-# OpenSSH 설치
+# OpenSSH 설치 및 설정
 RUN yum clean all && yum makecache fast && yum install -y openssh-server && \
     mkdir -p /var/run/sshd && echo 'root:password' | chpasswd && \
     sed -i 's/#PermitRootLogin yes/PermitRootLogin yes/' /etc/ssh/sshd_config && \
@@ -14,9 +14,16 @@ RUN yum clean all && yum makecache fast && yum install -y openssh-server && \
 # SSH 호스트 키 수동 생성
 RUN ssh-keygen -A
 
+# OpenJDK Development Kit 설치 (javac, jps 포함)
+RUN yum install -y java-1.8.0-openjdk-devel && \
+    export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk && \
+    echo 'export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk' >> /etc/profile && \
+    echo 'export PATH=$JAVA_HOME/bin:$PATH' >> /etc/profile && \
+    source /etc/profile
+
+# 공통 설치 스크립트 복사 및 실행
 COPY install-common.sh /root/install-common.sh
-RUN chmod +x /root/install-common.sh
-RUN /root/install-common.sh
+RUN chmod +x /root/install-common.sh && /root/install-common.sh
 
 # 포트 22 노출
 EXPOSE 22

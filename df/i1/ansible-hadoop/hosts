@@ -2,3 +2,11 @@
 s1 ansible_user=root
 s2 ansible_user=root
 s3 ansible_user=root
+
+[namenodes]
+s1
+
+[datanodes]
+s1
+s2
+s3

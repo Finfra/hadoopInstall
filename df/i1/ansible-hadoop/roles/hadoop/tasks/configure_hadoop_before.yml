@@ -1,0 +1,29 @@
+# roles/hadoop/tasks/configure_hadoop_before.yml
+
+- name: Stop running NameNode if exists
+  command: hdfs --daemon stop namenode
+  ignore_errors: true
+  register: stop_namenode
+
+- name: Ensure NameNode stopped by killing leftover process
+  shell: |
+    if [ -f /tmp/hadoop-root-namenode.pid ]; then
+      kill -9 $(cat /tmp/hadoop-root-namenode.pid) || true
+      rm -f /tmp/hadoop-root-namenode.pid
+    fi
+  when: stop_namenode.rc != 0
+  ignore_errors: true
+
+- name: Stop running DataNode if exists
+  command: hdfs --daemon stop datanode
+  ignore_errors: true
+  register: stop_datanode
+
+- name: Ensure DataNode stopped by killing leftover process
+  shell: |
+    if [ -f /tmp/hadoop-root-datanode.pid ]; then
+      kill -9 $(cat /tmp/hadoop-root-datanode.pid) || true
+      rm -f /tmp/hadoop-root-datanode.pid
+    fi
+  when: stop_datanode.rc != 0
+  ignore_errors: true
