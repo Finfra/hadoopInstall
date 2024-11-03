@@ -1,0 +1,5 @@
+- name: Ensure Hadoop path is in root's .bashrc
+  lineinfile:
+    path: /root/.bashrc
+    line: "export PATH=$PATH:/opt/hadoop/bin"
+    state: present
