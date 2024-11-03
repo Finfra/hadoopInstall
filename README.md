@@ -12,6 +12,7 @@ cd hadoopInstall
 
 ## Hadoop Install by Ansible
 ```
+# docker exec -it i1  bash
 ansible-playbook --flush-cache -i /df/ansible-hadoop/hosts /df/ansible-hadoop/hadoop_install.yml
 ```
 

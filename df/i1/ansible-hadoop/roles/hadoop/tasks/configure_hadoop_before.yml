@@ -1,9 +1,22 @@
 # roles/hadoop/tasks/configure_hadoop_before.yml
+- name: Check if NameNode is running
+  shell: |
+    if pgrep -f NameNode > /dev/null; then
+      echo "NameNode is running"
+    else
+      echo "NameNode is not running"
+      exit 1
+    fi
+  register: namenode_running
+  ignore_errors: true
+
 
 - name: Stop running NameNode if exists
   command: hdfs --daemon stop namenode
-  ignore_errors: true
   register: stop_namenode
+  ignore_errors: true
+  failed_when: stop_namenode.rc != 0 and 'No such file or directory' not in stop_namenode.msg
+
 
 - name: Ensure NameNode stopped by killing leftover process
   shell: |
@@ -11,11 +24,18 @@
       kill -9 $(cat /tmp/hadoop-root-namenode.pid) || true
       rm -f /tmp/hadoop-root-namenode.pid
     fi
-  when: stop_namenode.rc != 0
+  when: namenode_running.rc == 0 and stop_namenode.rc != 0
   ignore_errors: true
+
+- name: Check if DataNode is running
+  shell: pgrep -f DataNode
+  register: datanode_running
+  ignore_errors: true
+  failed_when: datanode_running.rc != 0
 
 - name: Stop running DataNode if exists
   command: hdfs --daemon stop datanode
+  when: datanode_running.rc == 0
   ignore_errors: true
   register: stop_datanode
 
@@ -25,5 +45,5 @@
       kill -9 $(cat /tmp/hadoop-root-datanode.pid) || true
       rm -f /tmp/hadoop-root-datanode.pid
     fi
-  when: stop_datanode.rc != 0
+  when: datanode_running.rc == 0 and stop_datanode.rc != 0
   ignore_errors: true
