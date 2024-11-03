@@ -12,7 +12,7 @@ cd hadoopInstall
 
 ## Hadoop Install by Ansible
 ```
- ansible-playbook --flush-cache -i /df/ansible-hadoop/hosts /df/ansible-hadoop/hadoop_install.yml
+ansible-playbook --flush-cache -i /df/ansible-hadoop/hosts /df/ansible-hadoop/hadoop_install.yml
 ```
 
 # Util
