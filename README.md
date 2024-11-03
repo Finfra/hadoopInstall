@@ -1,19 +1,19 @@
-# hadoop_clusterInstall
+# Hadoop ClusterInstall
 Hadoop cluster install on ubuntu docker
 * 주의 : 하둡파일(https://downloads.apache.org/hadoop/common/hadoop-3.3.6/hadoop-3.3.6.tar.gz)이 df/i1에 있어야 작동함.
 
-# install
+# Install
 ## Container Install
 ```
 git clone git@github.com:Finfra/hadoopInstall.git
 cd hadoopInstall
 . do.sh
 ```
+
 ## Hadoop Install by Ansible
 ```
  ansible-playbook --flush-cache -i /df/ansible-hadoop/hosts /df/ansible-hadoop/hadoop_install.yml
 ```
-
 
 # Util
 ## Dfs Test
@@ -40,13 +40,10 @@ jar -cvf WordCount.jar -C wordcount_classes/ .
 hdfs dfs -mkdir -p /user/hadoop/input
 hdfs dfs -put input.txt /user/hadoop/input/
 
-
 #hdfs dfs -rm -r /user/hadoop/output
 hadoop jar WordCount.jar WordCount /user/hadoop/input /user/hadoop/output
 
-
 hdfs dfs -cat /user/hadoop/output/part-r-00000
-
 ```
 
 ## Start/Stop
