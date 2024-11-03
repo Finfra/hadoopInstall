@@ -1,0 +1,5 @@
+- name: Hadoop Installation Playbook
+  hosts: hadoop_cluster
+  become: yes
+  roles:
+    - hadoop

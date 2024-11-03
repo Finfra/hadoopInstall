@@ -1,0 +1,4 @@
+[hadoop_cluster]
+s1 ansible_user=root
+s2 ansible_user=root
+s3 ansible_user=root

@@ -1,0 +1,31 @@
+- name: Check if Hadoop file exists
+  stat:
+    path: /df/hadoop-3.3.6.tar.gz  # 미리 다운로드한 파일 경로
+  register: hadoop_file
+
+- name: Download Hadoop if file does not exist
+  get_url:
+    url: https://downloads.apache.org/hadoop/common/hadoop-3.3.6/hadoop-3.3.6.tar.gz
+    dest: /df/hadoop-3.3.6.tar.gz
+  when: not hadoop_file.stat.exists
+
+- name: Copy Hadoop to target machine
+  copy:
+    src: /df/hadoop-3.3.6.tar.gz
+    dest: /opt/hadoop.tar.gz
+- name: Copy Hadoop from local
+  copy:
+    src: /df/hadoop-3.3.6.tar.gz
+    dest: /opt/hadoop.tar.gz
+
+- name: Extract Hadoop
+  unarchive:
+    src: /opt/hadoop.tar.gz
+    dest: /opt/
+    remote_src: yes
+
+- name: Create Hadoop symbolic link
+  file:
+    src: /opt/hadoop-3.3.6
+    dest: /opt/hadoop
+    state: link

@@ -1,7 +1,7 @@
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
-*$py.class
+# for macOS
+.DS_Store
+.AppleDouble
+.LSOverride
 
 # C extensions
 *.so

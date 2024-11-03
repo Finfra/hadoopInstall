@@ -1,0 +1,65 @@
+version: '3'
+
+services:
+  i1:
+    build:
+      context: .
+      dockerfile: i1.dockerfile
+    container_name: i1
+    hostname: i1
+    networks:
+      - sshnet
+    volumes:
+      - ./df/i1:/df
+    tty: true
+    depends_on:
+      - s1
+      - s2
+      - s3
+    # command: /root/setup-ssh.sh
+
+  s1:
+    build:
+      context: .
+      dockerfile: s.dockerfile
+    container_name: s1
+    hostname: s1
+    networks:
+      - sshnet
+    ports:
+      - "2221:22"
+    volumes:
+      - ./df/s1:/df
+    tty: true
+
+  s2:
+    build:
+      context: .
+      dockerfile: s.dockerfile
+    container_name: s2
+    hostname: s2
+    networks:
+      - sshnet
+    ports:
+      - "2222:22"
+    volumes:
+      - ./df/s2:/df
+    tty: true
+
+  s3:
+    build:
+      context: .
+      dockerfile: s.dockerfile
+    container_name: s3
+    hostname: s3
+    networks:
+      - sshnet
+    ports:
+      - "2223:22"
+    volumes:
+      - ./df/s3:/df
+    tty: true
+
+networks:
+  sshnet:
+    driver: bridge

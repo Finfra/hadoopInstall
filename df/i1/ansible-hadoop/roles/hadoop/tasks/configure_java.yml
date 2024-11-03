@@ -1,0 +1,16 @@
+- name: Set JAVA_HOME in hadoop-env.sh
+  lineinfile:
+    path: /opt/hadoop/etc/hadoop/hadoop-env.sh
+    line: 'export JAVA_HOME=/usr/lib/jvm/jre-openjdk'
+    create: yes
+
+- name: Set JAVA_HOME in ~/.bashrc
+  lineinfile:
+    path: ~/.bashrc
+    line: 'export JAVA_HOME=/usr/lib/jvm/jre-openjdk'
+    create: yes
+
+- name: Apply .bashrc changes
+  shell: source ~/.bashrc
+  args:
+    executable: /bin/bash
