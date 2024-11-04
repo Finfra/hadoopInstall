@@ -41,7 +41,8 @@ jar -cvf WordCount.jar -C wordcount_classes/ .
 hdfs dfs -mkdir -p /user/hadoop/input
 hdfs dfs -put input.txt /user/hadoop/input/
 
-#hdfs dfs -rm -r /user/hadoop/output
+# 두번째 실행시는 output폴더 제거 필요. hdfs dfs -rm -r /user/hadoop/output
+# "Name node is in safe mode" 메세지 나오면 "hdfs dfsadmin -safemode leave" 명령 입력.
 hadoop jar WordCount.jar WordCount /user/hadoop/input /user/hadoop/output
 
 hdfs dfs -cat /user/hadoop/output/part-r-00000
