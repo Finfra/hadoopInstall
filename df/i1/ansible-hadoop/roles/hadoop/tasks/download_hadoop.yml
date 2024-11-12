@@ -14,11 +14,6 @@
     src: /df/hadoop-3.3.6.tar.gz
     dest: /opt/hadoop.tar.gz
 
-- name: Copy Hadoop from local
-  copy:
-    src: /df/hadoop-3.3.6.tar.gz
-    dest: /opt/hadoop.tar.gz
-
 - name: Remove existing Hadoop directory if it exists
   file:
     path: /opt/hadoop-3.3.6

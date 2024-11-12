@@ -8,7 +8,7 @@ services:
     container_name: i1
     hostname: i1
     networks:
-      - sshnet
+      - hnet
     volumes:
       - ./df/i1:/df
     tty: true
@@ -25,7 +25,7 @@ services:
     container_name: s1
     hostname: s1
     networks:
-      - sshnet
+      - hnet
     ports:
       - "2221:22"
     volumes:
@@ -39,7 +39,7 @@ services:
     container_name: s2
     hostname: s2
     networks:
-      - sshnet
+      - hnet
     ports:
       - "2222:22"
     volumes:
@@ -53,7 +53,7 @@ services:
     container_name: s3
     hostname: s3
     networks:
-      - sshnet
+      - hnet
     ports:
       - "2223:22"
     volumes:
@@ -61,5 +61,5 @@ services:
     tty: true
 
 networks:
-  sshnet:
-    driver: bridge
+  hnet:
+    external: true

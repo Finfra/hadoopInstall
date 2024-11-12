@@ -7,7 +7,7 @@ yum install -y epel-release
 yum install -y ansible
 
 # .bashrc에 alias 추가
-cat << 'EOF' >> /etc/profile
+cat << 'EOF' >> /etc/bashrc
 # Start all node
 alias startAll='
 stopAll
@@ -34,5 +34,4 @@ ansible datanodes -i /df/ansible-hadoop/hosts -m shell -a "yarn --daemon stop no
 # MapReduce HistoryServer 종료 (선택 사항)
 ansible namenodes -i /df/ansible-hadoop/hosts -m shell -a "mapred --daemon stop historyserver" -u root
 '
-
 EOF

@@ -1,14 +1,21 @@
-# Hadoop ClusterInstall
-Hadoop cluster install on ubuntu docker
-* 주의 : 하둡파일(https://downloads.apache.org/hadoop/common/hadoop-3.3.6/hadoop-3.3.6.tar.gz)이 df/i1에 있어야 작동함.
+# 현재
+* toTry2 : https://galaxy.ansible.com/ui/standalone/roles/shubhambhardwaj007/hive/ 사용
 
-# Install
-## Container Install
+* toTry1 : derby방식 않됨. mysql방식으로 시도 합시다. 
+
+# Container Provisioning
+* docker-compose 로 i1,s1,s2,s3 컨테이너를 생성합니다. 
 ```
 git clone git@github.com:Finfra/hadoopInstall.git
 cd hadoopInstall
 . do.sh
 ```
+
+
+# Hadoop ClusterInstall
+* Hadoop cluster install on ubuntu docker
+* 주의1 : 하둡파일(https://downloads.apache.org/hadoop/common/hadoop-3.3.6/hadoop-3.3.6.tar.gz)이 df/i1에 있어야 작동함.
+
 
 ## Hadoop Install by Ansible
 ```
@@ -16,7 +23,6 @@ cd hadoopInstall
 ansible-playbook --flush-cache -i /df/ansible-hadoop/hosts /df/ansible-hadoop/hadoop_install.yml
 ```
 
-# Util
 ## Dfs Test
 * s1에서 실행
 ```
@@ -77,4 +83,3 @@ ansible datanodes -i /df/ansible-hadoop/hosts -m shell -a "yarn --daemon stop no
 # MapReduce HistoryServer 종료 (선택 사항)
 ansible namenodes -i /df/ansible-hadoop/hosts -m shell -a "mapred --daemon stop historyserver" -u root
 ```
-

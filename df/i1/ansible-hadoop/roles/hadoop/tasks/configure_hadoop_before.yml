@@ -53,3 +53,86 @@
     fi
   when: datanode_running.rc == 0 and stop_datanode.rc != 0
   ignore_errors: true
+
+- name: Check if NodeManager is running
+  shell: |
+    if pgrep -f NodeManager > /dev/null; then
+      echo "NodeManager is running"
+    else
+      echo "NodeManager is not running"
+      exit 1
+    fi
+  register: nodemanager_running
+  ignore_errors: true
+
+- name: Stop running NodeManager if exists
+  command: yarn --daemon stop nodemanager
+  register: stop_nodemanager
+  ignore_errors: true
+  when: nodemanager_running.rc == 0
+  failed_when: stop_nodemanager.rc != 0 and 'No such file or directory' not in stop_nodemanager.msg
+
+- name: Ensure NodeManager stopped by killing leftover process
+  shell: |
+    if [ -f /tmp/hadoop-root-nodemanager.pid ]; then
+      kill -9 $(cat /tmp/hadoop-root-nodemanager.pid) || true
+      rm -f /tmp/hadoop-root-nodemanager.pid
+    fi
+  when: nodemanager_running.rc == 0 and stop_nodemanager.rc != 0
+  ignore_errors: true
+
+
+- name: Check if ResourceManager is running
+  shell: |
+    if pgrep -f ResourceManager > /dev/null; then
+      echo "ResourceManager is running"
+    else
+      echo "ResourceManager is not running"
+      exit 1
+    fi
+  register: resourcemanager_running
+  ignore_errors: true
+
+- name: Stop running ResourceManager if exists
+  command: yarn --daemon stop resourcemanager
+  register: stop_resourcemanager
+  ignore_errors: true
+  when: resourcemanager_running.rc == 0
+  failed_when: stop_resourcemanager.rc != 0 and 'No such file or directory' not in stop_resourcemanager.msg
+
+- name: Ensure ResourceManager stopped by killing leftover process
+  shell: |
+    if [ -f /tmp/hadoop-root-resourcemanager.pid ]; then
+      kill -9 $(cat /tmp/hadoop-root-resourcemanager.pid) || true
+      rm -f /tmp/hadoop-root-resourcemanager.pid
+    fi
+  when: resourcemanager_running.rc == 0 and stop_resourcemanager.rc != 0
+  ignore_errors: true
+
+
+- name: Check if JobHistoryServer is running
+  shell: |
+    if pgrep -f JobHistoryServer > /dev/null; then
+      echo "JobHistoryServer is running"
+    else
+      echo "JobHistoryServer is not running"
+      exit 1
+    fi
+  register: jobhistoryserver_running
+  ignore_errors: true
+
+- name: Stop running JobHistoryServer if exists
+  command: mapred --daemon stop historyserver
+  register: stop_jobhistoryserver
+  ignore_errors: true
+  when: jobhistoryserver_running.rc == 0
+  failed_when: stop_jobhistoryserver.rc != 0 and 'No such file or directory' not in stop_jobhistoryserver.msg
+
+- name: Ensure JobHistoryServer stopped by killing leftover process
+  shell: |
+    if [ -f /tmp/hadoop-root-historyserver.pid ]; then
+      kill -9 $(cat /tmp/hadoop-root-historyserver.pid) || true
+      rm -f /tmp/hadoop-root-historyserver.pid
+    fi
+  when: jobhistoryserver_running.rc == 0 and stop_jobhistoryserver.rc != 0
+  ignore_errors: true
