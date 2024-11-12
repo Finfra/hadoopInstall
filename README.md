@@ -1,8 +1,3 @@
-# 현재
-* toTry2 : https://galaxy.ansible.com/ui/standalone/roles/shubhambhardwaj007/hive/ 사용
-
-* toTry1 : derby방식 않됨. mysql방식으로 시도 합시다. 
-
 # Container Provisioning
 * docker-compose 로 i1,s1,s2,s3 컨테이너를 생성합니다. 
 ```
