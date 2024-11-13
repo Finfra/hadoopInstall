@@ -3,10 +3,15 @@
     path: /df/hadoop-3.3.6.tar.gz  # 미리 다운로드한 파일 경로
   register: hadoop_file
 
-- name: Download Hadoop if file does not exist
-  get_url:
-    url: https://downloads.apache.org/hadoop/common/hadoop-3.3.6/hadoop-3.3.6.tar.gz
-    dest: /df/hadoop-3.3.6.tar.gz
+# - name: Download Hadoop if file does not exist
+#   get_url:
+#     url: https://downloads.apache.org/hadoop/common/hadoop-3.3.6/hadoop-3.3.6.tar.gz
+#     dest: /df/hadoop-3.3.6.tar.gz
+#   when: not hadoop_file.stat.exists
+
+- name: Abort playbook if Hadoop tarball does not exist
+  fail:
+    msg: "/df/hadoop-3.3.6.tar.gz에 존재하지 않습니다. 플레이북을 중지합니다."
   when: not hadoop_file.stat.exists
 
 - name: Copy Hadoop to target machine
