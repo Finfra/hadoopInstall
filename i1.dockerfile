@@ -3,7 +3,7 @@ FROM centos:centos7
 # 대체 리포지토리 설정 (Vault 사용)
 RUN sed -i 's|^mirrorlist=|#mirrorlist=|g' /etc/yum.repos.d/CentOS-Base.repo &&     sed -i 's|^#baseurl=http://mirror.centos.org/centos/$releasever|baseurl=http://vault.centos.org/7.9.2009|g' /etc/yum.repos.d/CentOS-Base.repo
 ## ok!!
-/usr/bin/echo '[epel]
+RUN /usr/bin/echo '[epel]
 name=Extra Packages for Enterprise Linux 7 - $basearch
 baseurl=http://download.fedoraproject.org/pub/epel/7/$basearch
 #baseurl=http://vault.centos.org/7.9.2009/updates/x86_64/epel/
