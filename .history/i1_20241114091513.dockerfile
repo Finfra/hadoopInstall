@@ -1,8 +1,9 @@
-#!/bin/bash
+FROM centos:centos7
+
 # 대체 리포지토리 설정 (Vault 사용)
-sed -i 's|^mirrorlist=|#mirrorlist=|g' /etc/yum.repos.d/CentOS-Base.repo &&     sed -i 's|^#baseurl=http://mirror.centos.org/centos/$releasever|baseurl=http://vault.centos.org/7.9.2009|g' /etc/yum.repos.d/CentOS-Base.repo
+RUN sed -i 's|^mirrorlist=|#mirrorlist=|g' /etc/yum.repos.d/CentOS-Base.repo &&     sed -i 's|^#baseurl=http://mirror.centos.org/centos/$releasever|baseurl=http://vault.centos.org/7.9.2009|g' /etc/yum.repos.d/CentOS-Base.repo
 ## ok!!
-/usr/bin/echo '[epel]
+RUN /usr/bin/echo '[epel]
 name=Extra Packages for Enterprise Linux 7 - $basearch
 baseurl=http://download.fedoraproject.org/pub/epel/7/$basearch
 #baseurl=http://vault.centos.org/7.9.2009/updates/x86_64/epel/
@@ -32,8 +33,17 @@ gpgcheck=1'> /etc/yum.repos.d/epel.repo
 
 
 
-yum clean all && yum makecache fast &&     yum install -y openssh-clients sshpass nmap-ncat
+RUN yum clean all && yum makecache fast &&     yum install -y openssh-clients sshpass nmap-ncat
 
+COPY install-common.sh /root/install-common.sh
+RUN chmod +x /root/install-common.sh
+RUN /root/install-common.sh
 
-yum install epel-release 
-yum install -y tree which git unzip tar wget net-tools
+COPY install-i1.sh /root/install-i1.sh
+RUN chmod +x /root/install-i1.sh
+RUN /root/install-i1.sh
+
+COPY setup-ssh.sh /root/setup-ssh.sh
+RUN chmod +x /root/setup-ssh.sh
+
+CMD ["/bin/bash", "-c", "/root/setup-ssh.sh && sleep infinity"]
