@@ -3,7 +3,7 @@
 echo $(date) > /tmp/installDate
 
 # 필수 패키지 설치
-yum install -y epel-release 
+yum install epel-release 
 yum install -y ansible
 
 # .bashrc에 alias 추가
