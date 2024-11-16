@@ -9,7 +9,7 @@ cd hadoopInstall
 
 # Hadoop ClusterInstall
 * Hadoop cluster install on ubuntu docker
-* 주의1 : 하둡파일(https://downloads.apache.org/hadoop/common/hadoop-3.3.6/hadoop-3.3.6.tar.gz)이 df/i1에 있어야 작동함.
+* 주의1 : 하둡파일(https://downloads.apache.org/hadoop/common/hadoop-3.3.6/hadoop-3.3.6.tar.gz)이 /df/i1에 있어야 작동함.
 
 
 ## Hadoop Install by Ansible
@@ -17,6 +17,20 @@ cd hadoopInstall
 # docker exec -it i1  bash
 ansible-playbook --flush-cache -i /df/ansible-hadoop/hosts /df/ansible-hadoop/hadoop_install.yml
 ```
+
+# 설치시 문제
+## /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7 이슈
+* 발생 원인 : 하나의 IP로 여러 컴퓨터가 curl로 키값을 받을 수 없고 웹브라우저로만 받아지는 현상 발생
+* 해결 방법
+  1. 웹브라우저로  https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7 에 접속해서 키값 복사
+  2. /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7 파일에 저장
+  3. "rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7"명령 실행
+  4. "yum install -y ansible" 명령으로 ansible 설치 가능.
+
+
+
+
+
 
 ## Dfs Test
 * s1에서 실행
@@ -53,6 +67,7 @@ hdfs dfs -cat /user/hadoop/output/part-r-00000
 * i1에서 실행
 ### Start all node
 ```bash
+# Alias : startAll
 # HDFS 데몬 시작
 ansible namenodes -i /df/ansible-hadoop/hosts -m shell -a "nohup hdfs --daemon start namenode &" -u root
 ansible datanodes -i /df/ansible-hadoop/hosts -m shell -a "nohup hdfs --daemon start datanode &" -u root
@@ -67,6 +82,7 @@ ansible namenodes -i /df/ansible-hadoop/hosts -m shell -a "nohup mapred --daemon
 
 ### Stop all node
 ```bash
+# Alias : stopAll
 # HDFS 데몬 종료
 ansible namenodes -i /df/ansible-hadoop/hosts -m shell -a "hdfs --daemon stop namenode" -u root
 ansible datanodes -i /df/ansible-hadoop/hosts -m shell -a "hdfs --daemon stop datanode" -u root
