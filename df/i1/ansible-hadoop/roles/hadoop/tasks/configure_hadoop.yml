@@ -54,3 +54,12 @@
     path: /opt/hadoop/etc/hadoop/hadoop-env.sh
     line: 'export JAVA_HOME=/usr/lib/jvm/jre-openjdk'
     create: yes
+- name: Configure Hadoop workers file
+  copy:
+    content: |
+      s1
+      s2
+      s3
+    dest: "{{ hadoop_home }}/etc/hadoop/workers"
+  vars:
+    hadoop_home: /opt/hadoop

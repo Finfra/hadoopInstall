@@ -136,3 +136,4 @@
     fi
   when: jobhistoryserver_running.rc == 0 and stop_jobhistoryserver.rc != 0
   ignore_errors: true
+

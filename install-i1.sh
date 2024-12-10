@@ -2,9 +2,9 @@
 # 설치 날짜 기록
 echo $(date) > /tmp/installDate
 
-# 필수 패키지 설치
-yum install epel-release 
-yum install -y ansible
+# EPEL 리포지토리 활성화 및 필수 패키지 설치
+dnf install -y ansible
+python3 -m pip install ansible-core
 
 # .bashrc에 alias 추가
 cat << 'EOF' >> /etc/bashrc

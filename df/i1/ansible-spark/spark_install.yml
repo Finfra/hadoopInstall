@@ -1,0 +1,7 @@
+---
+# Spark Installation Playbook
+- name: Spark Installation Playbook
+  hosts: hadoop_cluster
+  become: yes
+  roles:
+    - spark

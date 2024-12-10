@@ -1,0 +1,5 @@
+---
+- import_tasks: download_spark.yml
+- import_tasks: configure_spark_before.yml
+- import_tasks: configure_spark.yml
+- import_tasks: configure_spark_after.yml

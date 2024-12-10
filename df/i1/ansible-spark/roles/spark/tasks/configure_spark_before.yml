@@ -1,0 +1,8 @@
+---
+- name: Prepare Spark directories
+  file:
+    path: "/usr/local/spark"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
