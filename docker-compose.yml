@@ -33,6 +33,9 @@ services:
       - hnet
     ports:
       - "2221:22"
+      - "8080:8080"
+      - "4040:4040"
+      - "8083:8081"
     volumes:
       - ./df/s1:/df
     tty: true
@@ -48,6 +51,7 @@ services:
       - hnet
     ports:
       - "2222:22"
+      - "8082:8081"
     volumes:
       - ./df/s2:/df
     tty: true
@@ -63,6 +67,7 @@ services:
       - hnet
     ports:
       - "2223:22"
+      - "8083:8081"
     volumes:
       - ./df/s3:/df
     tty: true
