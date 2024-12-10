@@ -1,19 +1,14 @@
-FROM centos:centos7
+FROM nowage/i1s3:oraclelinux9
 
-# 대체 리포지토리 설정 (Vault 사용)
-RUN sed -i 's|^mirrorlist=|#mirrorlist=|g' /etc/yum.repos.d/CentOS-Base.repo &&     sed -i 's|^#baseurl=http://mirror.centos.org/centos/$releasever|baseurl=http://vault.centos.org/7.9.2009|g' /etc/yum.repos.d/CentOS-Base.repo
 
-RUN yum clean all && yum makecache fast &&     yum install -y openssh-clients sshpass nmap-ncat
-
-COPY install-common.sh /root/install-common.sh
-RUN chmod +x /root/install-common.sh
-RUN /root/install-common.sh
-
+# 추가 설치 스크립트 복사 및 실행
 COPY install-i1.sh /root/install-i1.sh
-RUN chmod +x /root/install-i1.sh
-RUN /root/install-i1.sh
+RUN chmod +x /root/install-i1.sh && /root/install-i1.sh
 
+# SSH 설정 스크립트 복사
 COPY setup-ssh.sh /root/setup-ssh.sh
 RUN chmod +x /root/setup-ssh.sh
 
+# SSH 설정 및 실행
 CMD ["/bin/bash", "-c", "/root/setup-ssh.sh && sleep infinity"]
+

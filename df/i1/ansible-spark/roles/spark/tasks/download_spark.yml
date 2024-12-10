@@ -1,0 +1,43 @@
+---
+- name: Check if Spark file exists
+  stat:
+    path: /df/spark-3.4.4-bin-hadoop3.tgz  # 미리 다운로드한 파일 경로
+  register: spark_file
+
+# - name: Download Spark if file does not exist
+#   get_url:
+#     url: https://dlcdn.apache.org/spark/spark-3.4.4/spark-3.4.4-bin-hadoop3.tgz
+#     dest: /df/spark-3.4.4-bin-hadoop3.tgz
+#   when: not spark_file.stat.exists
+
+# - name: Abort playbook if Spark tarball does not exist
+#   fail:
+#     msg: "/df/spark-3.4.4-bin-hadoop3.tgz에 존재하지 않습니다. 플레이북을 중지합니다."
+#   when: not spark_file.stat.exists
+
+- name: Copy Spark to target machine
+  copy:
+    src: /df/spark-3.4.4-bin-hadoop3.tgz
+    dest: /opt/spark.tar.gz
+
+- name: Remove existing Spark directory if it exists
+  file:
+    path: /opt/spark-3.4.4-bin-hadoop3
+    state: absent
+
+- name: Remove existing Spark link if it exists
+  file:
+    path: /opt/spark
+    state: absent
+
+- name: Extract Spark
+  unarchive:
+    src: /opt/spark.tar.gz
+    dest: /usr/local/
+    remote_src: yes
+
+- name: Create Spark symbolic link
+  file:
+    src: /usr/local/spark-3.4.4-bin-hadoop3
+    dest: /usr/local/spark
+    state: link

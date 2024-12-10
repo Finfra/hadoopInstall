@@ -1,0 +1,7 @@
+- name: Apply Spark environment variables globally
+  shell: |
+    echo "export SPARK_HOME=/usr/local/spark" >> /etc/bashrc
+    echo "export PATH=\$SPARK_HOME/bin:\$SPARK_HOME/sbin:\$PATH" >> /etc/bashrc
+  args:
+    executable: /bin/bash
+

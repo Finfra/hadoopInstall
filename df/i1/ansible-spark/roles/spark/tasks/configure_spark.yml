@@ -1,0 +1,36 @@
+---
+- name: Remove existing Spark directory if it exists
+  file:
+    path: /usr/local/spark
+    state: absent
+
+- name: Extract Spark
+  unarchive:
+    src: /opt/spark.tar.gz
+    dest: /usr/local/
+    remote_src: yes
+
+- name: Create Spark symbolic link
+  file:
+    src: /usr/local/spark-3.4.4-bin-hadoop3
+    dest: /usr/local/spark
+    state: link
+
+
+- name: Create spark-defaults.conf
+  copy:
+    dest: /usr/local/spark/conf/spark-defaults.conf
+    content: |
+      spark.executor.cores=2
+      spark.executor.memory=1g
+      spark.default.parallelism=100
+      spark.scheduler.mode=FAIR
+      spark.network.timeout=120s
+
+- name: Create slaves file
+  copy:
+    dest: /usr/local/spark/conf/slaves
+    content: |
+      s1
+      s2
+      s3

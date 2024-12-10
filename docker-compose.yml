@@ -1,6 +1,10 @@
-version: '3'
-
 services:
+  i1s3:
+    build:
+      context: .
+      dockerfile: i1s3.dockerfile
+    image: nowage/i1s3:oraclelinux9
+
   i1:
     build:
       context: .
@@ -13,6 +17,7 @@ services:
       - ./df/i1:/df
     tty: true
     depends_on:
+      - i1s3
       - s1
       - s2
       - s3
@@ -31,7 +36,8 @@ services:
     volumes:
       - ./df/s1:/df
     tty: true
-
+    depends_on:
+      - i1s3
   s2:
     build:
       context: .
@@ -45,7 +51,8 @@ services:
     volumes:
       - ./df/s2:/df
     tty: true
-
+    depends_on:
+      - i1s3
   s3:
     build:
       context: .
@@ -59,7 +66,8 @@ services:
     volumes:
       - ./df/s3:/df
     tty: true
-
+    depends_on:
+      - i1s3
 networks:
   hnet:
     external: true

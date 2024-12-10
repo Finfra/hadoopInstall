@@ -8,7 +8,7 @@ cd hadoopInstall
 
 
 # Hadoop ClusterInstall
-* Hadoop cluster install on ubuntu docker
+* Hadoop cluster install on oraclelinux9 docker
 * 주의1 : 하둡파일(https://downloads.apache.org/hadoop/common/hadoop-3.3.6/hadoop-3.3.6.tar.gz)이 /df/i1에 있어야 작동함.
 
 
@@ -18,19 +18,18 @@ cd hadoopInstall
 ansible-playbook --flush-cache -i /df/ansible-hadoop/hosts /df/ansible-hadoop/hadoop_install.yml
 ```
 
-# 설치시 문제
-## /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7 이슈
-* 발생 원인 : 하나의 IP로 여러 컴퓨터가 curl로 키값을 받을 수 없고 웹브라우저로만 받아지는 현상 발생
-* 해결 방법
-  1. 웹브라우저로  https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7 에 접속해서 키값 복사
-  2. /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7 파일에 저장
-  3. "rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7"명령 실행
-  4. "yum install -y ansible" 명령으로 ansible 설치 가능.
+# Spark ClusterInstall
+* Spark cluster install on oraclelinux9 docker
+* 주의1 : 하둡파일(https://dlcdn.apache.org/spark/spark-3.4.4/spark-3.4.4-bin-hadoop3.tgz)이 /df/i1에 있어야 작동함.
+
+## Spark Install by Ansible
+```
+# docker exec -it i1  bash
+ansible-playbook --flush-cache -i /df/ansible-spark/hosts /df/ansible-spark/spark_install.yml -e ansible_python_interpreter=/usr/bin/python3.12
+```
 
 
-
-
-
+# Hadoop Check
 
 ## Dfs Test
 * s1에서 실행
@@ -93,4 +92,51 @@ ansible datanodes -i /df/ansible-hadoop/hosts -m shell -a "yarn --daemon stop no
 
 # MapReduce HistoryServer 종료 (선택 사항)
 ansible namenodes -i /df/ansible-hadoop/hosts -m shell -a "mapred --daemon stop historyserver" -u root
+```
+
+
+
+
+
+# Spark Check
+## Service Start and Stop
+```
+# Spark 재시작
+$SPARK_HOME/sbin/stop-all.sh
+$SPARK_HOME/sbin/start-all.sh
+```
+
+## pySpark shell 실행 
+```
+# ssh s1
+pyspark
+```
+
+## Example Code 
+```
+from pyspark import SparkContext, SparkConf
+
+# Spark 설정
+conf = SparkConf().setAppName("TaskDistribution").setMaster("spark://s1:7077")
+sc = SparkContext(conf=conf)
+
+# 데이터 생성
+data = range(100)
+rdd = sc.parallelize(data, 1000).repartition(3)
+
+# 각 파티션의 실행 노드 확인
+def log_partition(index, iterator):
+    import socket
+    hostname = socket.gethostname()
+    print(f"Partition {index} is running on {hostname}")
+    return iterator
+
+result = rdd.mapPartitionsWithIndex(log_partition).collect()
+
+# 결과 출력
+print(result)
+
+# SparkContext 종료
+sc.stop()
+
 ```
