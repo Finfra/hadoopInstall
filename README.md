@@ -6,6 +6,17 @@ cd hadoopInstall
 . do.sh
 ```
 
+# 주의
+## 내부망에서 설치시 인증서 설치
+1. i1s3.dockerfile과 같은 위치에 lotte.net.crt 파일 생성
+2. i1s3.dockerfile에 아래 내용을 파일 처음에 추가
+``` 
+# 사설 인증서 복사 및 갱신
+COPY lotte.net.crt /etc/pki/ca-trust/source/anchors/lotte.net.crt
+RUN update-ca-trust enable
+RUN update-ca-trust extract
+```
+
 
 # Hadoop ClusterInstall
 * Hadoop cluster install on oraclelinux9 docker
