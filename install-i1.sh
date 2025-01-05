@@ -6,6 +6,15 @@ echo $(date) > /tmp/installDate
 dnf install -y ansible
 python3 -m pip install ansible-core
 
+
+# dnf install -y java-1.8.0-openjdk-devel 
+# export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk 
+# echo 'export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk' >> /etc/profile 
+# echo 'export PATH=$JAVA_HOME/bin:$PATH' >> /etc/profile 
+# source /etc/profile
+
+
+
 # .bashrc에 alias 추가
 cat << 'EOF' >> /etc/bashrc
 # Start all node

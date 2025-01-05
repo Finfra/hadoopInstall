@@ -1,0 +1,2 @@
+- include_tasks: install_kafka.yml
+- include_tasks: configure_kafka.yml

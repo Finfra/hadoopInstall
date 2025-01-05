@@ -1,0 +1,9 @@
+- name: Check Zookeeper status
+  ansible.builtin.command:
+    cmd: echo stat | nc localhost 2181
+  register: zookeeper_status
+  ignore_errors: yes
+
+- name: Display Zookeeper status
+  ansible.builtin.debug:
+    msg: "{{ zookeeper_status.stdout }}"

@@ -1,0 +1,10 @@
+- name: Start Zookeeper service
+  hosts: consumer  # Ensure the play is targeting the correct hosts (or specify a specific group)
+  become: yes  # Ensures you have the necessary privileges to start the service
+  tasks:
+    - name: Start Zookeeper service
+      ansible.builtin.command:
+        cmd: zookeeper-server-start.sh /opt/kafka/config/zookeeper.properties
+        creates: /var/run/zookeeper.pid
+      async: 10
+      poll: 0

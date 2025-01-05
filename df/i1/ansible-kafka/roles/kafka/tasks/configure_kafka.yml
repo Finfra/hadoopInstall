@@ -1,0 +1,66 @@
+- name: Update PATH in bashrc
+  ansible.builtin.lineinfile:
+    path: /etc/bashrc
+    line: 'export PATH=$PATH:/opt/kafka/bin'
+    state: present
+    create: yes
+    backup: yes
+
+- name: Install confluent-kafka
+  ansible.builtin.pip:
+    name: confluent-kafka
+    executable: pip3
+  when: inventory_hostname in groups['producer']
+
+- name: Install kafka-python
+  ansible.builtin.pip:
+    name: kafka-python
+    executable: pip3
+  when: inventory_hostname in groups['producer']
+
+- name: Configure Zookeeper properties
+  ansible.builtin.blockinfile:
+    path: /opt/kafka/config/zookeeper.properties
+    block: |
+      dataDir=/var/lib/zookeeper
+      initLimit=10
+      syncLimit=5
+      server.1=s1:2888:3888
+    state: present
+    create: yes
+    backup: yes
+
+- name: Ensure /var/lib/zookeeper directory exists
+  ansible.builtin.file:
+    path: /var/lib/zookeeper
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Create myid file
+  ansible.builtin.copy:
+    dest: /var/lib/zookeeper/myid
+    content: "{{ groups['consumer'].index(inventory_hostname) + 1 }}"
+    owner: root
+    group: root
+    mode: '0644'
+  when: inventory_hostname in groups['consumer']
+
+- name: Configure Kafka server properties
+  ansible.builtin.lineinfile:
+    path: /opt/kafka/config/server.properties
+    line: |
+      zookeeper.connect=s1:2181
+    state: present
+    create: yes
+    backup: yes
+  when: inventory_hostname in groups['consumer']
+
+- name: Set unique broker ID
+  ansible.builtin.lineinfile:
+    path: /opt/kafka/config/server.properties
+    line: "broker.id={{ groups['consumer'].index(inventory_hostname) + 1 }}"
+    state: present
+  when: inventory_hostname in groups['consumer']
+

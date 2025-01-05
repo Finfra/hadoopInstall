@@ -1,0 +1,3 @@
+- include_tasks: install_kafka.yml
+- include_tasks: configure_kafka.yml
+# - include_tasks: start_zookeeper.yml

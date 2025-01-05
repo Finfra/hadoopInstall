@@ -10,5 +10,7 @@ COPY setup-ssh.sh /root/setup-ssh.sh
 RUN chmod +x /root/setup-ssh.sh
 
 # SSH 설정 및 실행
-CMD ["/bin/bash", "-c", "/root/setup-ssh.sh && sleep infinity"]
+# CMD ["/bin/bash", "-c", "/root/setup-ssh.sh && sleep infinity"]
+CMD ["/bin/bash", "-c", "/root/setup-ssh.sh && /usr/sbin/sshd -D"]
+
 

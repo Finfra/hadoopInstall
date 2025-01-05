@@ -1,0 +1,22 @@
+- name: Install dependencies
+  ansible.builtin.yum:
+    name:
+      - java-11-openjdk
+      - wget
+      - tar
+    state: latest
+
+- name: Extract ZooKeeper binary
+  ansible.builtin.unarchive:
+    src: "/tmp/zookeeper.tar.gz"
+    dest: "/opt/zookeeper"
+    remote_src: yes
+
+- name: Configure ZooKeeper
+  ansible.builtin.template:
+    src: zoo.cfg.j2
+    dest: /opt/zookeeper/conf/zoo.cfg
+
+- name: Start ZooKeeper service
+  ansible.builtin.command:
+    cmd: "/opt/zookeeper/bin/zkServer.sh start"

@@ -1,0 +1,15 @@
+- name: Download Kafka
+  ansible.builtin.get_url:
+    url: https://dlcdn.apache.org/kafka/3.9.0/kafka_2.12-3.9.0.tgz
+    dest: /df/kafka_2.12-3.9.0.tgz
+
+- name: Extract Kafka
+  ansible.builtin.unarchive:
+    src: /df/kafka_2.12-3.9.0.tgz
+    dest: /opt/
+    remote_src: yes
+
+- name: Rename Kafka Directory
+  ansible.builtin.command:
+    cmd: mv /opt/kafka_2.12-3.9.0 /opt/kafka
+    creates: /opt/kafka

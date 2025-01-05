@@ -8,7 +8,7 @@
 - name: Set JAVA_HOME in /etc/bashrc
   lineinfile:
     path: /etc/bashrc
-    line: 'export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk'
+    line: 'export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-17.0.13.0.11-4.0.1.el9.aarch64/'
     create: yes
 
 - name: Add JAVA_HOME to PATH

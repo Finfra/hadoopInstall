@@ -46,17 +46,17 @@
 #     seconds: 10
 #   when: "'datanodes' in group_names"
 
-- name: Start ResourceManager on namenodes
-  shell: "yarn --daemon start resourcemanager"
-  when: "'namenodes' in group_names"
+# - name: Start ResourceManager on namenodes
+#   shell: "yarn --daemon start resourcemanager"
+#   when: "'namenodes' in group_names"
 
-- name: Start NodeManager on datanodes
-  shell: "yarn --daemon start nodemanager"
-  when: "'datanodes' in group_names"
+# - name: Start NodeManager on datanodes
+#   shell: "yarn --daemon start nodemanager"
+#   when: "'datanodes' in group_names"
 
-- name: Start HistoryServer (for MapReduce job history)
-  shell: "mapred --daemon start historyserver"
-  when: "'namenodes' in group_names"
+# - name: Start HistoryServer (for MapReduce job history)
+#   shell: "mapred --daemon start historyserver"
+#   when: "'namenodes' in group_names"
 
 
 

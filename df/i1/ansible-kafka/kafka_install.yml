@@ -1,0 +1,6 @@
+- name: Install and Configure Kafka
+  hosts: all
+  become: yes
+  tasks:
+    - include_role:
+        name: kafka

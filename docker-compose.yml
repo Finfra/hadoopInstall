@@ -73,6 +73,20 @@ services:
     tty: true
     depends_on:
       - i1s3
+  m1:
+    image: mysql:latest
+    container_name: m1
+    hostname: m1
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: test_db
+    networks:
+      - hnet
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./df/m1:/df
+    restart: always
 networks:
   hnet:
     external: true
