@@ -1,3 +1,4 @@
 hadoop-*.gz
 hive-*.gz
 spark-*.tgz
+kafka_*.tgz

@@ -1,3 +1,4 @@
 hadoop-*.gz
 WordCount.jar
 wordcount_classes
+kafka_*.tgz
