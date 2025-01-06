@@ -1,21 +1,21 @@
 # roles/hadoop/tasks/configure_java.yml
 
-- name: Install OpenJDK
-  package:
-    name: java-1.8.0-openjdk-devel
-    state: present
+# - name: Install OpenJDK
+#   package:
+#     name: java-1.8.0-openjdk-devel
+#     state: present
 
-- name: Set JAVA_HOME in /etc/bashrc
-  lineinfile:
-    path: /etc/bashrc
-    line: 'export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-17.0.13.0.11-4.0.1.el9.aarch64/'
-    create: yes
+# - name: Set JAVA_HOME in /etc/bashrc
+#   lineinfile:
+#     path: /etc/bashrc
+#     line: 'export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-17.0.13.0.11-4.0.1.el9.aarch64/'
+#     create: yes
 
-- name: Add JAVA_HOME to PATH
-  lineinfile:
-    path: /etc/bashrc
-    line: 'export PATH=$JAVA_HOME/bin:$PATH'
-    create: yes
+# - name: Add JAVA_HOME to PATH
+#   lineinfile:
+#     path: /etc/bashrc
+#     line: 'export PATH=$JAVA_HOME/bin:$PATH'
+#     create: yes
 
 - name: Source /etc/bashrc
   shell: source /etc/bashrc
