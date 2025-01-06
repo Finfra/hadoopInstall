@@ -43,9 +43,13 @@ mkdir -p /root/.ssh
 chmod 700 /root/.ssh
 
 dnf install -y java-17-openjdk
-export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-17.0.13.0.11-4.0.1.el9.x86_64
-echo 'export JAVA_HOME=export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-17.0.13.0.11-4.0.1.el9.x86_64' >> /etc/bashrc 
-echo 'export PATH=$JAVA_HOME/bin:$PATH' >> /etc/bashrc
+JAVA_EXEC=$(readlink -f $(which java))
+JAVA_HOME=$(dirname $(dirname $JAVA_EXEC))
+echo export JAVA_HOME=$JAVA_HOME >> /etc/bashrc 
+
+# export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-17.0.13.0.11-4.0.1.el9.x86_64
+# echo 'export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-17.0.13.0.11-4.0.1.el9.x86_64' >> /etc/bashrc 
+#echo 'export PATH=$JAVA_HOME/bin:$PATH' >> /etc/bashrc
 source /etc/bashrc
 
 

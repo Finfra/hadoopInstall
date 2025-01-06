@@ -49,11 +49,16 @@
     src: hdfs-site.xml.j2
     dest: /opt/hadoop-3.3.6/etc/hadoop/hdfs-site.xml
 
+- name: Get system JAVA_HOME
+  shell: echo $JAVA_HOME
+  register: java_home_result
+
 - name: Set JAVA_HOME in hadoop-env.sh
   lineinfile:
     path: /opt/hadoop/etc/hadoop/hadoop-env.sh
-    line: 'export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-17.0.13.0.11-4.0.1.el9.aarch64'
+    line: "export JAVA_HOME={{ java_home_result.stdout }}"
     create: yes
+
 - name: Configure Hadoop workers file
   copy:
     content: |
