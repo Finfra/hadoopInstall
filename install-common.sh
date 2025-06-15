@@ -2,8 +2,10 @@
 cat << 'EOF' >> /etc/bashrc 
 export LC_ALL=C.UTF-8
 EOF
+echo '[ -f /etc/bashrc ] && . /etc/bashrc' >> /root/.bashrc
 
 # EPEL 리포지토리 활성화
+dnf update -y
 dnf install -y oracle-epel-release-el9
 
 # 유틸리티 패키지 설치
